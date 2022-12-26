@@ -6,8 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class RebornInvasionApplication extends Application {
+public class RebornInvasionApplication extends Application implements Serializable {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(RebornInvasionApplication.class.getResource("reborninvasion-view.fxml"));
