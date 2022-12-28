@@ -23,9 +23,9 @@ To view the programming libraries, go to [Programming Libraries](https://globalc
 
 ### 2. Command Line Interface Apps
 
-| App | Progress | 
-|-----|----------|
-|     |          | 
+| App                                                    | Progress    | 
+|--------------------------------------------------------|-------------|
+| [Life Simulation](cli-apps/LIFE_SIMULATION/index.html) | In progress | 
 
 ### 3. Graphical User Interface Apps
 
