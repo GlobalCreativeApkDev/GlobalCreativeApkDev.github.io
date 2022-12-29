@@ -1170,6 +1170,10 @@ class WallTile(CityTile):
         # type: () -> None
         CityTile.__init__(self)
 
+    def __str__(self):
+        # type: () -> str
+        return str(type(self).__name__) + "(WALL)"
+
 
 class WaterTile(CityTile):
     """
@@ -1179,6 +1183,10 @@ class WaterTile(CityTile):
     def __init__(self):
         # type: () -> None
         CityTile.__init__(self)
+
+    def __str__(self):
+        # type: () -> str
+        return str(type(self).__name__) + "(WATER)"
 
 
 class GrassTile(CityTile):
@@ -1201,6 +1209,10 @@ class GrassTile(CityTile):
             return True
         return False
 
+    def __str__(self):
+        # type: () -> str
+        return str(type(self).__name__) + "(GRASS)"
+
 
 class PavementTile(CityTile):
     """
@@ -1222,6 +1234,10 @@ class PavementTile(CityTile):
             self.__game_characters.remove(game_character)
             return True
         return False
+
+    def __str__(self):
+        # type: () -> str
+        return str(type(self).__name__) + "(PAVEMENT)"
 
 
 ###########################################
@@ -1474,9 +1490,8 @@ class Skill:
 
     def __init__(self, name, description, skill_type, magic_points_cost, damage_multiplier,
                  beneficial_effects_to_allies, harmful_effects_to_enemies, allies_attack_gauge_up,
-                 enemies_attack_gauge_down, heal_amount_to_allies, does_ignore_enemies_defense, does_ignore_shield,
-                 does_ignore_invincibility):
-        # type: (str, str, str, mpf, mpf, list, list, mpf, mpf, mpf, bool, bool, bool) -> None
+                 enemies_attack_gauge_down, heal_amount_to_allies):
+        # type: (str, str, str, mpf, mpf, list, list, mpf, mpf, mpf) -> None
         self.name: str = name
         self.description: str = description
         self.skill_type = skill_type if skill_type in self.POSSIBLE_SKILL_TYPES else self.POSSIBLE_SKILL_TYPES[0]
@@ -1488,9 +1503,6 @@ class Skill:
         self.allies_attack_gauge_up: mpf = allies_attack_gauge_up
         self.enemies_attack_gauge_down: mpf = enemies_attack_gauge_down
         self.heal_amount_to_allies: mpf = heal_amount_to_allies
-        self.does_ignore_enemies_defense: bool = does_ignore_enemies_defense
-        self.does_ignore_shield: bool = does_ignore_shield
-        self.does_ignore_invincibility: bool = does_ignore_invincibility
 
     def get_beneficial_effects_to_allies(self):
         # type: () -> list
@@ -1499,6 +1511,12 @@ class Skill:
     def get_harmful_effects_to_enemies(self):
         # type: () -> list
         return self.__harmful_effects_to_enemies
+
+    def level_up(self):
+        # type: () -> None
+        self.level += 1
+        self.damage_multiplier *= mpf("1.25")
+        self.heal_amount_to_allies *= mpf("1.25")
 
     def __str__(self):
         # type: () -> str
@@ -1524,11 +1542,69 @@ class BeneficialEffect:
     This class contains attributes of a beneficial effect a legendary creature has.
     """
 
+    def __init__(self, name, is_stackable, heal_percentage_per_turn, attack_power_percentage_up,
+                 attack_speed_percentage_up, defense_percentage_up, crit_rate_up, crit_damage_up):
+        # type: (str, bool, mpf, mpf, mpf, mpf, mpf, mpf) -> None
+        self.name: str = name
+        self.is_stackable: bool = is_stackable
+        self.heal_percentage_per_turn: mpf = heal_percentage_per_turn
+        self.attack_power_percentage_up: mpf = attack_power_percentage_up
+        self.attack_speed_percentage_up: mpf = attack_speed_percentage_up
+        self.defense_percentage_up: mpf = defense_percentage_up
+        self.crit_rate_up: mpf = crit_rate_up
+        self.crit_damage_up: mpf = crit_damage_up
+
+    def __str__(self):
+        # type: () -> str
+        res: str = str(type(self).__name__) + "("  # initial value
+        index: int = 0  # initial value
+        for item in vars(self).items():
+            res += str(item[0]) + "=" + str(item[1])
+
+            if index < len(vars(self).items()) - 1:
+                res += ", "
+
+            index += 1
+
+        return res + ")"
+
+    def clone(self):
+        # type: () -> BeneficialEffect
+        return copy.deepcopy(self)
+
 
 class HarmfulEffect:
     """
     This class contains attributes of a harmful effect a legendary creature has.
     """
+
+    def __init__(self, name, is_stackable, damage_percentage_per_turn, attack_power_percentage_down,
+                 attack_speed_percentage_down, defense_percentage_down):
+        # type: (str, bool, mpf, mpf, mpf, mpf) -> None
+        self.name: str = name
+        self.is_stackable: bool = is_stackable
+        self.damage_percentage_per_turn: mpf = damage_percentage_per_turn
+        self.attack_power_percentage_down: mpf = attack_power_percentage_down
+        self.attack_speed_percentage_down: mpf = attack_speed_percentage_down
+        self.defense_percentage_down: mpf = defense_percentage_down
+
+    def __str__(self):
+        # type: () -> str
+        res: str = str(type(self).__name__) + "("  # initial value
+        index: int = 0  # initial value
+        for item in vars(self).items():
+            res += str(item[0]) + "=" + str(item[1])
+
+            if index < len(vars(self).items()) - 1:
+                res += ", "
+
+            index += 1
+
+        return res + ")"
+
+    def clone(self):
+        # type: () -> HarmfulEffect
+        return copy.deepcopy(self)
 
 
 ###########################################
@@ -1539,6 +1615,39 @@ class HarmfulEffect:
 ###########################################
 # ITEMS
 ###########################################
+
+
+class ItemShop:
+    """
+    This class contains attributes of a shop selling items.
+    """
+
+    def __init__(self, items_sold):
+        # type: (list) -> None
+        self.name: str = "ITEM SHOP"
+        self.__items_sold: list = items_sold
+
+    def get_items_sold(self):
+        # type: () -> list
+        return self.__items_sold
+
+    def __str__(self):
+        # type: () -> str
+        res: str = str(type(self).__name__) + "("  # initial value
+        index: int = 0  # initial value
+        for item in vars(self).items():
+            res += str(item[0]) + "=" + str(item[1])
+
+            if index < len(vars(self).items()) - 1:
+                res += ", "
+
+            index += 1
+
+        return res + ")"
+
+    def clone(self):
+        # type: () -> ItemShop
+        return copy.deepcopy(self)
 
 
 class Item:
@@ -1552,6 +1661,7 @@ class Item:
         self.description: str = description
         self.dollars_cost: mpf = dollars_cost
         self.sell_dollars_gain: mpf = dollars_cost / 5
+        self.item_type: str = "ITEM"
 
     def __str__(self):
         # type: () -> str
@@ -1577,11 +1687,21 @@ class TrainerItem(Item):
     This class contains attributes of an item to be used by trainers.
     """
 
+    def __init__(self, name, description, dollars_cost):
+        # type: (str, str, mpf) -> None
+        Item.__init__(self, name, description, dollars_cost)
+        self.item_type: str = "TRAINER ITEM"
+
 
 class Weapon(TrainerItem):
     """
     This class contains attributes of a weapon the trainers can bring to PVP battles.
     """
+
+    def __init__(self, name, description, dollars_cost, damage):
+        # type: (str, str, mpf, mpf) -> None
+        TrainerItem.__init__(self, name, description, dollars_cost)
+        self.damage: mpf = damage
 
 
 class Armor(TrainerItem):
@@ -1589,11 +1709,10 @@ class Armor(TrainerItem):
     This class contains attributes of an armor the trainers can bring to PVP battles.
     """
 
-
-class Crop(TrainerItem):
-    """
-    This class contains attributes of a crop the trainers can grow in this game.
-    """
+    def __init__(self, name, description, dollars_cost, armor):
+        # type: (str, str, mpf, mpf) -> None
+        TrainerItem.__init__(self, name, description, dollars_cost)
+        self.armor: mpf = armor
 
 
 class LegendaryCreatureItem(Item):
@@ -1601,11 +1720,28 @@ class LegendaryCreatureItem(Item):
     This class contains attributes of an item to be used by legendary creatures.
     """
 
+    def __init__(self, name, description, dollars_cost):
+        # type: (str, str, mpf) -> None
+        Item.__init__(self, name, description, dollars_cost)
+        self.item_type: str = "LEGENDARY CREATURE ITEM"
+
 
 class Egg(LegendaryCreatureItem):
     """
     This class contains attributes of an egg which can be hatched to produce a new legendary creature
     """
+
+    POTENTIAL_ELEMENTS: list = ["TERRA", "FLAME", "SEA", "NATURE", "ELECTRIC", "ICE", "METAL", "DARK", "LIGHT", "WAR",
+                                "PURE", "LEGEND", "PRIMAL", "WIND", "BEAUTY", "MAGIC", "CHAOS", "HAPPY", "DREAM",
+                                "SOUL"]
+
+    def __init__(self, dollars_cost, element):
+        # type: (mpf, str) -> None
+        LegendaryCreatureItem.__init__(self, str(element if element in self.POTENTIAL_ELEMENTS else
+                                                 self.POTENTIAL_ELEMENTS[0]).upper() +
+                                       " EGG", "An egg which can be hatched for legendary creatures to come out.",
+                                       dollars_cost)
+        self.element: str = element if element in self.POTENTIAL_ELEMENTS else self.POTENTIAL_ELEMENTS[0]
 
 
 class Ball(LegendaryCreatureItem):
@@ -1613,11 +1749,125 @@ class Ball(LegendaryCreatureItem):
     This class contains attributes of a ball used to catch a legendary creature.
     """
 
+    MIN_CATCH_RATE: mpf = mpf("0.1")
+    MAX_CATCH_RATE: mpf = mpf("1")
+
+    def __init__(self, name, description, dollars_cost, catch_rate):
+        # type: (str, str, mpf, mpf) -> None
+        LegendaryCreatureItem.__init__(self, name, description, dollars_cost)
+        self.catch_rate: mpf = catch_rate if self.MIN_CATCH_RATE <= catch_rate <= self.MAX_CATCH_RATE \
+            else self.MIN_CATCH_RATE
+
 
 class Rune(LegendaryCreatureItem):
     """
     This class contains attributes of a rune used to strengthen legendary creatures.
     """
+
+    MIN_SLOT_NUMBER: int = 1
+    MAX_SLOT_NUMBER: int = 6
+    MIN_RATING: int = 1
+    MAX_RATING: int = 6
+
+    def __init__(self, name, description, dollars_cost, rating, slot_number):
+        # type: (str, str, mpf, int, int) -> None
+        LegendaryCreatureItem.__init__(self, name, description, dollars_cost)
+        self.rating: int = rating if self.MIN_RATING <= rating <= self.MAX_RATING else self.MIN_RATING
+        self.slot_number: int = slot_number if self.MIN_SLOT_NUMBER <= slot_number <= self.MAX_SLOT_NUMBER \
+            else self.MIN_SLOT_NUMBER
+        self.level: int = 1
+        self.level_up_dollars_cost: mpf = dollars_cost
+        self.level_up_success_rate: mpf = mpf("1")
+        self.already_placed: bool = False  # initial value
+        self.stat_increase: StatIncrease = self.__get_stat_increase()
+
+    def __get_stat_increase(self):
+        # type: () -> StatIncrease
+        return StatIncrease(max_hp_up=mpf("10") ** (6 * self.rating),
+                            max_hp_percentage_up=mpf(2 * self.rating),
+                            max_magic_points_up=mpf("10") ** (6 * self.rating),
+                            max_magic_points_percentage_up=mpf(2 * self.rating),
+                            attack_up=mpf("10") ** (5 * self.rating),
+                            attack_percentage_up=mpf(2 * self.rating),
+                            defense_up=mpf("10") ** (5 * self.rating),
+                            defense_percentage_up=mpf(2 * self.rating),
+                            attack_speed_up=mpf(2 * self.rating),
+                            crit_rate_up=mpf(0.01 * self.rating),
+                            crit_damage_up=mpf(0.05 * self.rating),
+                            resistance_up=mpf(0.01 * self.rating),
+                            accuracy_up=mpf(0.01 * self.rating))
+
+    def level_up(self):
+        # type: () -> bool
+        # Check whether levelling up is successful or not
+        if random.random() > self.level_up_success_rate:
+            return False
+
+        # Increase the level of the rune
+        self.level += 1
+
+        # Update the cost and success rate of levelling up the rune
+        self.level_up_dollars_cost *= mpf("10") ** (self.level + self.rating)
+        self.level_up_success_rate *= mpf("0.95")
+
+        # Increase main stat attribute
+        self.stat_increase.max_hp_up += mpf("10") ** (6 * self.rating + self.level)
+        self.stat_increase.max_hp_percentage_up += self.rating
+        self.stat_increase.max_magic_points_up += mpf("10") ** (6 * self.rating + self.level)
+        self.stat_increase.max_magic_points_percentage_up += self.rating
+        self.stat_increase.attack_up += mpf("10") ** (5 * self.rating + 1)
+        self.stat_increase.attack_percentage_up += self.rating
+        self.stat_increase.defense_up += mpf("10") ** (5 * self.rating + 1)
+        self.stat_increase.defense_percentage_up += self.rating
+        self.stat_increase.attack_speed_up += 2 * self.rating
+        self.stat_increase.crit_rate_up += 0.01 * self.rating
+        self.stat_increase.crit_damage_up += 0.05 * self.rating
+        self.stat_increase.resistance_up += 0.01 * self.rating
+        self.stat_increase.accuracy_up += 0.01 * self.rating
+        return True
+
+
+class StatIncrease:
+    """
+    This class contains attributes of the increase in stats of a rune.
+    """
+
+    def __init__(self, max_hp_up=mpf("0"), max_hp_percentage_up=mpf("0"), max_magic_points_up=mpf("0"),
+                 max_magic_points_percentage_up=mpf("0"), attack_up=mpf("0"), attack_percentage_up=mpf("0"),
+                 defense_up=mpf("0"), defense_percentage_up=mpf("0"), attack_speed_up=mpf("0"), crit_rate_up=mpf("0"),
+                 crit_damage_up=mpf("0"), resistance_up=mpf("0"), accuracy_up=mpf("0")):
+        # type: (mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf, mpf) -> None
+        self.max_hp_up: mpf = max_hp_up
+        self.max_hp_percentage_up: mpf = max_hp_percentage_up
+        self.max_magic_points_up: mpf = max_magic_points_up
+        self.max_magic_points_percentage_up: mpf = max_magic_points_percentage_up
+        self.attack_up: mpf = attack_up
+        self.attack_percentage_up: mpf = attack_percentage_up
+        self.defense_up: mpf = defense_up
+        self.defense_percentage_up: mpf = defense_percentage_up
+        self.attack_speed_up: mpf = attack_speed_up
+        self.crit_rate_up: mpf = crit_rate_up
+        self.crit_damage_up: mpf = crit_damage_up
+        self.resistance_up: mpf = resistance_up
+        self.accuracy_up: mpf = accuracy_up
+
+    def __str__(self):
+        # type: () -> str
+        res: str = str(type(self).__name__) + "("  # initial value
+        index: int = 0  # initial value
+        for item in vars(self).items():
+            res += str(item[0]) + "=" + str(item[1])
+
+            if index < len(vars(self).items()) - 1:
+                res += ", "
+
+            index += 1
+
+        return res + ")"
+
+    def clone(self):
+        # type: () -> StatIncrease
+        return copy.deepcopy(self)
 
 
 class AwakenShard(LegendaryCreatureItem):
@@ -1625,11 +1875,24 @@ class AwakenShard(LegendaryCreatureItem):
     This class contains attributes of an awaken shard to immediately awaken a legendary creature.
     """
 
+    def __init__(self, dollars_cost, legendary_creature_element):
+        # type: (mpf, str) -> None
+        LegendaryCreatureItem.__init__(self, "AWAKEN SHARD", "A shard used to immediately awaken a "
+                                                             "legendary creature.", dollars_cost)
+        self.legendary_creature_element: str = legendary_creature_element  # the element of the legendary creature
+        # to be awakened
+
 
 class EXPShard(LegendaryCreatureItem):
     """
     This class contains attributes of an EXP shard to increase the EXP of a legendary creature.
     """
+
+    def __init__(self, dollars_cost, exp_granted):
+        # type: (mpf, mpf) -> None
+        LegendaryCreatureItem.__init__(self, "EXP SHARD", "A shard used to immediately increase the EXP of a "
+                                                          "legendary creature.", dollars_cost)
+        self.exp_granted: mpf = exp_granted
 
 
 class LevelUpShard(LegendaryCreatureItem):
@@ -1637,12 +1900,22 @@ class LevelUpShard(LegendaryCreatureItem):
     This class contains attributes of a shard used to immediately level up a legendary creature.
     """
 
+    def __init__(self, dollars_cost):
+        # type: (mpf) -> None
+        LegendaryCreatureItem.__init__(self, "LEVEL UP SHARD", "A shard used to immediately increase the level of "
+                                                               "a legendary creature.", dollars_cost)
+
 
 class SkillLevelUpShard(LegendaryCreatureItem):
     """
     This class contains attributes of a skill level up shard to immediately increase the level of a
     skill possessed by a legendary creature.
     """
+
+    def __init__(self, dollars_cost):
+        # type: (mpf) -> None
+        Item.__init__(self, "SKILL LEVEL UP SHARD", "A shard used to immediately increase the level of a "
+                                                    "legendary creature' s skill.", dollars_cost)
 
 
 ###########################################
@@ -1801,13 +2074,35 @@ class Trainer(GameCharacter):
         self.energy: mpf = mpf("100")
         self.max_energy: mpf = mpf("100")
         self.energy_recharge_per_minute: mpf = mpf("1")
+        self.max_hp: mpf = mpf(random.randint(120, 150))
+        self.curr_hp: mpf = self.max_hp
+        self.strength: mpf = mpf(random.randint(40, 50))
+        self.defense: mpf = mpf(random.randint(20, 30))
+        self.speed: mpf = mpf(random.randint(20, 30))
+        self.dexterity: mpf = mpf(random.randint(20, 30))
+        self.weapon: Weapon or None = None
+        self.armor: Armor or None = None
         self.in_jail: bool = False
         self.in_hospital: bool = False
+
+    def enter_jail(self):
+        # type: () -> bool
+        if not self.in_jail:
+            self.in_jail = True
+            return True
+        return False
 
     def exit_jail(self):
         # type: () -> bool
         if self.in_jail:
             self.in_jail = False
+            return True
+        return False
+
+    def enter_hospital(self):
+        # type: () -> bool
+        if not self.in_hospital:
+            self.in_hospital = True
             return True
         return False
 
@@ -1944,72 +2239,6 @@ class Hospital:
         return copy.deepcopy(self)
 
 
-class AwardCondition:
-    """
-    This class contains attributes of a condition for an award to be achieved.
-    """
-
-    def __init__(self, checked_player_attribute, min_value):
-        # type: (str, int) -> None
-        self.checked_player_attribute: str = checked_player_attribute
-        self.min_value: int = min_value
-
-    def __str__(self):
-        # type: () -> str
-        res: str = str(type(self).__name__) + "("  # initial value
-        index: int = 0  # initial value
-        for item in vars(self).items():
-            res += str(item[0]) + "=" + str(item[1])
-
-            if index < len(vars(self).items()) - 1:
-                res += ", "
-
-            index += 1
-
-        return res + ")"
-
-    def clone(self):
-        # type: () -> AwardCondition
-        return copy.deepcopy(self)
-
-
-class Award:
-    """
-    This class contains attributes of an award a player can get for achieving something.
-    """
-
-    def __init__(self, name, description, condition):
-        # type: (str, str, AwardCondition) -> None
-        self.name: str = name
-        self.description: str = description
-        self.condition: AwardCondition = condition
-
-    def condition_is_met(self, trainer):
-        # type: (Trainer) -> bool
-        try:
-            return mpf(getattr(trainer, str(self.condition.checked_player_attribute))) >= self.condition.min_value
-        except AttributeError:
-            return False
-
-    def __str__(self):
-        # type: () -> str
-        res: str = str(type(self).__name__) + "("  # initial value
-        index: int = 0  # initial value
-        for item in vars(self).items():
-            res += str(item[0]) + "=" + str(item[1])
-
-            if index < len(vars(self).items()) - 1:
-                res += ", "
-
-            index += 1
-
-        return res + ")"
-
-    def clone(self):
-        # type: () -> Award
-        return copy.deepcopy(self)
-
-
 class ResourceReward:
     """
     This class contains attributes of the resources gained for doing something.
@@ -2053,6 +2282,16 @@ class Game:
     """
     This class contains attributes of saved game data.
     """
+
+    def __init__(self, player_data, item_shop, minigames):
+        # type: (Trainer, ItemShop, list) -> None
+        self.player_data: Trainer = player_data
+        self.item_shop: ItemShop = item_shop
+        self.__minigames: list = minigames
+
+    def get_minigames(self):
+        # type: () -> list
+        return self.__minigames
 
     def __str__(self):
         # type: () -> str
