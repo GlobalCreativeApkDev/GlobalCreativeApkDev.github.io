@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "break_infinity.js": "^2.0.0",
+    "break_infinity.js": "^2.2.0",
     "lodash": "^4.17.21",
     "pad-end": "^1.0.2"
   }
