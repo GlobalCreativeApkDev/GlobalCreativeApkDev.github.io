@@ -23,17 +23,15 @@ To view the programming libraries, go to [Programming Libraries](https://globalc
 
 ### 2. Command Line Interface Apps
 
-| App                                                    | Progress    | 
-|--------------------------------------------------------|-------------|
-| [Life Simulation](cli-apps/LIFE_SIMULATION/index.html) | In progress | 
+| App | Progress | 
+|-----|----------|
+|     |          | 
 
 ### 3. Graphical User Interface Apps
 
-| App                                                                                           | Progress    | 
-|-----------------------------------------------------------------------------------------------|-------------|
-| [Reborn Invasion](gui-apps/RebornInvasion/RebornInvasion/index.html)                          | In progress |
-| [Box Keep Ups](gui-apps/BoxKeepUps/BoxKeepUps/index.html)                                     | In progress |
-| [Fantasy Planet Adventure](gui-apps/FantasyPlanetAdventure/FantasyPlanetAdventure/index.html) | In progress |
+| App | Progress | 
+|-----|----------|
+|     |          | 
 
 ### 4. Android Apps
 
