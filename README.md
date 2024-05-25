@@ -44,5 +44,3 @@ To view the programming libraries, go to [Programming Libraries](https://globalc
 | App | Progress | 
 |-----|----------|
 |     |          | 
-
-
