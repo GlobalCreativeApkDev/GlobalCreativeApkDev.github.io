@@ -1,0 +1,10 @@
+LICENSE
+README.md
+setup.cfg
+setup.py
+gemini_cli_creature_hunter/gemini_cli_creature_hunter.py
+gemini_cli_creature_hunter.egg-info/PKG-INFO
+gemini_cli_creature_hunter.egg-info/SOURCES.txt
+gemini_cli_creature_hunter.egg-info/dependency_links.txt
+gemini_cli_creature_hunter.egg-info/entry_points.txt
+gemini_cli_creature_hunter.egg-info/top_level.txt
