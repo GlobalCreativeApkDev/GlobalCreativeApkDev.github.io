@@ -512,7 +512,7 @@ class CityTile:
 
     def __str__(self):
         # type: () -> str
-        return "(" + str(type(self).__name__) + ") AND " + list_to_string([trainer.name for trainer in self.__trainers])
+        return "(" + str(type(self).__name__) + ")\nAND\n" + list_to_string([trainer.name for trainer in self.__trainers])
 
     def clone(self):
         # type: () -> CityTile
@@ -1752,7 +1752,6 @@ def main() -> int:
             action = input("Sorry, invalid input! What do you want to do? ")
 
         if action == "MOVE TRAINER":
-            clear()
             direction: str = input("Please enter \"UP\", \"DOWN\", \"LEFT\", or \"RIGHT\"! ")
             while direction not in ["UP", "DOWN", "LEFT", "RIGHT"]:
                 direction = input("Sorry, invalid input! Please enter \"UP\", \"DOWN\", \"LEFT\", or \"RIGHT\"! ")
@@ -1765,6 +1764,9 @@ def main() -> int:
                 saved_game_data.trainer_data.move_left()
             elif direction == "RIGHT":
                 saved_game_data.trainer_data.move_right()
+
+            # Clearing the command line window.
+            clear()
 
             # Checking the type of tile the player lands on.
             curr_tile: CityTile = saved_game_data.trainer_data.get_city_tile()
@@ -2274,6 +2276,8 @@ def main() -> int:
                                     break
             else:
                 pass
+
+            input("Please enter anything to continue: ")
         elif action == "PLACE RUNE":
             clear()
             runes: list = [item for item in saved_game_data.trainer_data.item_inventory.get_items() if
@@ -2314,6 +2318,8 @@ def main() -> int:
 
                 chosen_creature: LegendaryCreature = saved_game_data.trainer_data.legendary_creature_inventory.get_legendary_creatures()[creature_index - 1]
                 saved_game_data.trainer_data.place_rune_on_legendary_creature(chosen_creature, rune_to_place)
+
+            input("Please enter anything to continue: ")
         elif action == "LEVEL UP RUNE":
             clear()
             runes: list = [item for item in saved_game_data.trainer_data.item_inventory.get_items() if
@@ -2335,6 +2341,8 @@ def main() -> int:
 
                 rune_to_level_up: Rune = runes[rune_index - 1]
                 saved_game_data.trainer_data.level_up_rune(rune_to_level_up)
+
+            input("Please enter anything to continue: ")
         elif action == "REMOVE RUNE":
             clear()
             runes: list = [item for item in saved_game_data.trainer_data.item_inventory.get_items() if
@@ -2359,6 +2367,8 @@ def main() -> int:
                                                                        saved_game_data.trainer_data.legendary_creature_inventory.get_legendary_creatures()
                                                                        if rune_to_remove in legendary_creature.get_runes().values()][0]
                 saved_game_data.trainer_data.remove_rune_from_legendary_creature(corresponding_legendary_creature, rune_to_remove.slot_number)
+
+            input("Please enter anything to continue: ")
         elif action == "BUY ITEM":
             clear()
             items_sold: list = []  # initial value
@@ -2429,6 +2439,7 @@ def main() -> int:
 
             item_to_buy: Item = item_shop.get_items_sold()[item_index - 1]
             saved_game_data.trainer_data.purchase_item(item_to_buy)
+            input("Please enter anything to continue: ")
         elif action == "SELL ITEM":
             clear()
             placed_runes: list = [item for item in saved_game_data.trainer_data.item_inventory.get_items()
@@ -2452,6 +2463,8 @@ def main() -> int:
 
                 item_to_sell: Item = can_be_sold[item_index - 1]
                 saved_game_data.trainer_data.sell_item(item_to_sell)
+
+            input("Please enter anything to continue: ")
         elif action == "USE ITEM":
             clear()
             usable_items: list = [item for item in saved_game_data.trainer_data.item_inventory.get_items()
@@ -2504,6 +2517,8 @@ def main() -> int:
                     chosen_skill.level_up()
                 else:
                     pass
+
+            input("Please enter anything to continue: ")
         elif action == "MANAGE BATTLE TEAM":
             clear()
             print("Enter \"ADD LEGENDARY CREATURE\" to add legendary creature to your battle team.")
@@ -2560,10 +2575,13 @@ def main() -> int:
                     saved_game_data.trainer_data.remove_legendary_creature_from_team(creature_to_remove)
             else:
                 pass
+
+            input("Please enter anything to continue: ")
         elif action == "VIEW STATS":
             clear()
             print("Below are your current stats.\n")
             print(saved_game_data.trainer_data)
+            input("Please enter anything to continue: ")
         else:
             pass
 
