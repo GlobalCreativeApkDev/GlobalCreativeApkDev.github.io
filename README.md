@@ -25,7 +25,7 @@ To view the programming libraries, go to [Programming Libraries](https://globalc
 
 | App                                                                             | Progress | 
 |---------------------------------------------------------------------------------|----------|
-| [Gemini CLI Creature Hunter](cli-apps/gemini_cli_creature_hunter/index.html)    |          | 
+| [Gemini CLI Creature Hunter](cli-apps/gemini_cli_creature_hunter/index.html)    | Complete | 
 
 ### 3. Graphical User Interface Apps
 
