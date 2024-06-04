@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini CLI Creature Hunter</title>
+</head>
+<body>
+    <h1 id="gemini_cli_creature_hunter">gemini_cli_creature_hunter</h1>
+    <p><strong>Gemini CLI Creature Hunter</strong> is a Pokemon-like game on command-line interface with Google Gemini AI 
+    integrated into it.</p>
+    <h1 id="source-code">Source Code</h1>
+    <p>The source code of the game <strong>Gemini CLI Creature Hunter</strong> is available in 
+    <a href="https://github.com/GlobalCreativeApkDev/GlobalCreativeApkDev.github.io/blob/main/cli-apps/gemini_cli_creature_hunter/gemini_cli_creature_hunter/gemini_cli_creature_hunter.py">Source Code</a>.</p>
+    <h1 id="installation">Installation</h1>
+    <pre><code>pip <span class="hljs-keyword">install</span> gemini_cli_creature_hunter
+    </code></pre><h1 id="how-to-play-the-game-">How to Play the Game?</h1>
+    <p>Pre-requisites:</p>
+    <ol>
+    <li><a href="https://www.python.org/downloads/">Python</a> installed in your device.</li>
+    <li>env file in the same directory as <GEMINI_CLI_CREATURE_HUNTER_DIRECTORY> and has the value of GEMINI_API_KEY.</li>
+    <li>The directory &quot;saved&quot; exists inside the directory <GEMINI_CLI_CREATURE_HUNTER_DIRECTORY>. 
+    Please create the &quot;saved&quot; directory if it has not existed in <GEMINI_CLI_CREATURE_HUNTER_DIRECTORY> directory yet.</li>
+    </ol>
+    <p>First, open a Terminal or Command Prompt window and run the following commands.</p>
+    <pre><code><span class="hljs-keyword">cd</span> <span class="hljs-symbol">&lt;GEMINI_CLI_CREATURE_HUNTER_DIRECTORY&gt;</span>
+    <span class="hljs-keyword">python3</span> gemini_cli_creature_hunter.<span class="hljs-keyword">py</span>
+    </code></pre><p><strong>Note:</strong> Replace <GEMINI_CLI_CREATURE_HUNTER_DIRECTORY> with the path to the directory of the game 
+    <strong>Gemini CLI Creature Hunter</strong>.</p>
+    <p>Then, the game will start with something looking like in the screenshot below.</p>
+    <p><img src="images/Game.png" alt="Game"></p>
+    <p>You have two choices:</p>
+    <ol>
+    <li>Enter &quot;NEW GAME&quot; to create new saved game data.</li>
+    <li>Enter &quot;LOAD GAME&quot; to load existing saved game data.</li>
+    </ol>
+    <h1 id="new-saved-game-data-creation">New Saved Game Data Creation</h1>
+    <p>The following happens if you choose to create new saved game data.</p>
+    <p><img src="images/New_Saved_Game_Data.png" alt="Create New Saved Game Data"></p>
+    <p>You will then be asked to input the following values.</p>
+    <ol>
+    <li>Temperature - between 0 and 1 inclusive</li>
+    <li>Top P - between 0 and 1 inclusive</li>
+    <li>Top K - at least 1</li>
+    <li>Max output tokens - at least 1</li>
+    <li>Your name to be used as your trainer&#39;s name</li>
+    </ol>
+    <p>You will then be directed to the main menu.</p>
+    <h1 id="loading-existing-saved-game-data">Loading Existing Saved Game Data</h1>
+    <p>You will only be able to load existing saved game data if at least one or more saved game 
+    files are stored inside the &quot;saved&quot; directory.</p>
+    <p>The following happens when you choose to load existing saved game data.</p>
+    <p><img src="images/Load_Saved_Game_Data.png" alt="Load Saved Game Data"></p>
+    <p>You will then be asked to enter the name of the trainer associated with the existing saved game data you want to load.
+    After that, your saved game data will be loaded and you will be directed to the main menu.</p>
+    <h1 id="main-menu">Main Menu</h1>
+    <p>Once you reach the main menu, you will be asked whether you want to continue playing the game or not. If you enter &#39;Y&#39;, 
+    you will be directed to choose an action. Else, your game data will be saved and you will exit the game.</p>
+    <p><img src="images/Main_Menu.png" alt="Main Menu"></p>
+    <h1 id="action-choice">Action Choice</h1>
+    <p>Once you entered &#39;Y&#39; when you were at the main menu, you will be redirected to action choice. At the top of the 
+    command-line window, you will see the map of the city you are in (together with your current location). Below 
+    the map, you will see the available actions you can choose to do. Battles against wild legendary creatures or trainers 
+    might occur if you enter &quot;MOVE TRAINER&quot; and then select the direction you want to move to.</p>
+    <p><img src="images/Action_Choice.png" alt="Action Choice"></p>
+    <p>Then, you will need to follow the instructions on the screen, for whichever action you choose to do.</p>
+</body>
+</html>
